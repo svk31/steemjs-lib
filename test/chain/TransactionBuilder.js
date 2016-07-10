@@ -6,9 +6,8 @@ const options = {
     url: "wss://this.piston.rocks"
 };
 
-var SteemRPC = require('steem-rpc')(options);
-SteemRPC.close();
-var Api = SteemRPC.get();
+var {Client} = require('steem-rpc');
+var Api = Client.get(options);
 var { TransactionBuilder, Login } = require("../../lib/chain");
 
 var {accountName, password} = require("./config.js");

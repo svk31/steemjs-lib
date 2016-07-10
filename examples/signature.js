@@ -5,9 +5,10 @@ const options = {
     url: "wss://this.piston.rocks"
 };
 
-var Api = require("steem-rpc")(options);
+var {Client}} = require("steem-rpc");
+var Api = Client(options);
 console.log("api:", Api);
-Api.get().initPromise.then(function(res) {
+Api.initPromise.then(function(res) {
     console.log("*** Connected to", res, "***");
 }).catch(err => {
     console.log("Connection error:", err);
