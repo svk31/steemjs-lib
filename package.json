@@ -1,0 +1,58 @@
+{
+  "name": "steemjs-lib",
+  "version": "0.0.1",
+  "description": "Pure JavaScript Steem library for node.js and browsers.",
+  "browser": {
+    "websocket": false
+  },
+  "scripts": {
+    "test": "mocha --compilers js:babel-core/register --recursive",
+    "test:chain": "mocha --compilers js:babel-core/register ./test/chain --recursive --watch",
+    "test:ecc": "mocha --compilers js:babel-core/register ./test/ecc --recursive",
+    "test:serializer": "mocha --compilers js:babel-core/register ./test/serializer --recursive",
+    "test:watch": "npm test -- --watch",
+    "clean": "rm -rf ./dist/* & rm -rf ./build/*",
+    "prebuild": "npm run clean",
+    "build": "babel lib --presets babel-preset-es2015 --out-dir dist",
+    "prepublish": "npm run build",
+    "doc": "esdoc -c esdoc.json",
+    "example-sig": "nodemon ./examples/signature.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/svk31/steemjs-lib.git"
+  },
+  "author": "Sigve Kvalsvik <bitsharesblocks@gmail.com> (https://github.com/svk31)",
+  "contributors": [
+    "James Calfee <james@jcalfee.info> (https://github.com/jcalfee/)"
+  ],
+  "license": "BSD-2-Clause-FreeBSD",
+  "bugs": {
+    "url": "https://github.com/svk31/steemjs-lib/issues"
+  },
+  "engines": {
+    "node": ">= 6.0.0"
+  },
+  "main": "./dist/index.js",
+  "dependencies": {
+    "bigi": "^1.4.1",
+    "bs58": "^3.0.0",
+    "bytebuffer": "^5.0.0",
+    "crypto-js": "^3.1.5",
+    "deep-equal": "^1.0.1",
+    "ecurve": "^1.0.2",
+    "event-emitter": "^0.3.4",
+    "immutable": "^3.7.6",
+    "secure-random": "^1.1.1",
+    "steem-rpc": "^0.3.0"
+  },
+  "devDependencies": {
+    "assert": "^1.3.0",
+    "babel-cli": "^6.9.0",
+    "babel-core": "^6.10.4",
+    "babel-eslint": "^6.0.4",
+    "babel-preset-es2015": "^6.9.0",
+    "esdoc": "^0.4.3",
+    "mocha": "^2.5.3"
+  }
+}
