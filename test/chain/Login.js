@@ -11,6 +11,9 @@ var auths = {
     ]
 }
 
+var {accountName, keys, auths: keyAuths} = require("./config.js").withKey;
+
+
 describe("AccountLogin", () => {
 
     afterEach(function() {
@@ -19,7 +22,7 @@ describe("AccountLogin", () => {
 
     describe("Instance", function() {
         it ("Instantiates with default roles", function() {
-            let roles = login.get("roles");
+            let roles = login.getRoles();
 
             assert(roles.length );
             assert(roles[0] === "active");
@@ -31,7 +34,7 @@ describe("AccountLogin", () => {
         it ("Is not singleton", function() {
             login.setRoles(["singleton"]);
 
-            let roles = login2.get("roles");
+            let roles = login2.getRoles();
             assert(roles.length === 4  );
             assert(roles[0] !== "singleton");
         });
@@ -41,7 +44,7 @@ describe("AccountLogin", () => {
 
         it ("Set roles", function() {
             login.setRoles(["active"]);
-            let roles = login.get("roles");
+            let roles = login.getRoles();
 
             assert(roles.length === 1 );
             assert(roles[0] === "active" );
@@ -66,7 +69,7 @@ describe("AccountLogin", () => {
             assert(Object.keys(pubKeys).length === 1);
         });
 
-        it ("Check keys", function() {
+        it ("Check keys from password", function() {
             let success = login.checkKeys({
                 accountName: "someaccountname",
                 password: "somereallylongpassword",
@@ -74,7 +77,18 @@ describe("AccountLogin", () => {
             });
 
             assert(true, success);
+        });
 
+        it ("Check keys from privKey", function() {
+            let loginKey = new Login();
+            let success = loginKey.checkKeys({
+                accountName: accountName,
+                password: null,
+                privateKey: keys.posting,
+                auths: keyAuths
+            });
+
+            assert(true, success);
         });
     })
 
