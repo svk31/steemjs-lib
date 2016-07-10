@@ -1,6 +1,9 @@
 var assert = require("assert");
-var login = require("../../lib/chain/src/AccountLogin");
-var login2 = require("../../lib/chain/src/AccountLogin");
+
+var Login = require("../../lib/chain/src/AccountLogin");
+
+var login = new Login();
+var login2 = new Login();
 
 var auths = {
     active: [
@@ -25,12 +28,12 @@ describe("AccountLogin", () => {
             assert(roles[3] === "memo");
         });
 
-        it ("Is singleton", function() {
+        it ("Is not singleton", function() {
             login.setRoles(["singleton"]);
 
             let roles = login2.get("roles");
-            assert(roles.length === 1  );
-            assert(roles[0] === "singleton");
+            assert(roles.length === 4  );
+            assert(roles[0] !== "singleton");
         });
     });
 

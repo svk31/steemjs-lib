@@ -16,6 +16,8 @@ var {accountName, password} = require("./config.js");
 console.log(accountName, password);
 let account;
 
+var login = new Login();
+
 describe("TransactionBuilder", function() {
 
     before(function() {
@@ -24,8 +26,8 @@ describe("TransactionBuilder", function() {
             return Api.database_api().exec("get_accounts", [[ accountName]]).then(function(res) {
 
                 account = res[0];
-                Login.setRoles(["posting"]);
-                Login.checkKeys({
+                login.setRoles(["posting"]);
+                login.checkKeys({
                     accountName: accountName,
                     password: password,
                     auths: {
@@ -61,7 +63,7 @@ describe("TransactionBuilder", function() {
             weight: 10000
         });
 
-        Login.signTransaction(tr);
+        login.signTransaction(tr);
     })
 
     it("Process transaction", function() {
@@ -74,7 +76,7 @@ describe("TransactionBuilder", function() {
             weight: 10000
         });
 
-        tr.process_transaction(Login, null, false);
+        tr.process_transaction(login, null, false);
     })
 
     // it("Broadcast transaction", function() {
