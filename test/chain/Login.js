@@ -12,7 +12,7 @@ var auths = {
 }
 
 var {accountName, keys, auths: keyAuths} = require("./config.js").withKey;
-
+// console.log("accountName:", accountName, "keys:", keys);
 
 describe("AccountLogin", () => {
 
@@ -67,6 +67,16 @@ describe("AccountLogin", () => {
             assert(privKeys.active);
             assert(Object.keys(privKeys).length === 1);
             assert(Object.keys(pubKeys).length === 1);
+        });
+
+        it ("Generate keys from key", function() {
+            let keyLogin = new Login();
+            let {privKeys, pubKeys} = keyLogin.fromPrivKey(accountName, keys.posting, ["posting"]);
+
+            assert(privKeys.posting);
+            assert.equal(Object.keys(privKeys).length, 1);
+            assert.equal(Object.keys(pubKeys).length, 1);
+            assert.equal(pubKeys.posting, keyAuths.posting[0][0]);
         });
 
         it ("Check keys from password", function() {
