@@ -125,6 +125,31 @@ describe("TransactionBuilder", function() {
         tr.process_transaction(login, null, false);
     });
 
+    it("Update account posting key", function() {
+        login.setRoles(["active"]);
+        login.checkKeys({
+            accountName: passAccount,
+            password: password,
+            auths: {
+                owner: account.owner.key_auths,
+                active: account.active.key_auths,
+                posting: account.posting.key_auths
+            }}
+        );
+        let tr = new TransactionBuilder();
+
+        let postingAuth = account.posting;
+        postingAuth.account_auths.push(["streemian", 1]);
+        tr.add_type_operation("account_update", {
+            account: passAccount,
+            posting: postingAuth,
+            memo_key: account.memo_key,
+            json_metadata: account.json_metadata
+        });
+
+        tr.process_transaction(login, null, false);
+    });
+
     // it("Broadcast transaction with key login", function(done) {
     //     this.timeout = 6000;
     //     let loginKey = new Login();
