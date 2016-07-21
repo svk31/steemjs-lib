@@ -14,8 +14,10 @@ npm install steemjs-lib
 
 DISCLAIMER: This is a work in progress and most likely there will be bugs. Please file issues if you encounter any problems.
 
+The source code uses ES6 syntax but the npm library is transpiled to regular ES5 and can be used without Babel.
+
 ## Tests
-There's quite extensive suite of tests that can be run using `npm run test`. These tests cover many different use cases and can be used as a reference point.
+There's a quite extensive suite of tests that can be run using `npm run test`. These tests cover many different use cases and can be used as a reference point.
 
 ## Usage
 
@@ -30,8 +32,22 @@ The transaction builder can be used to construct any transaction, sign it, and b
 For an example of how to create transaction, see below:
 
 ```
-let login = new Login();
-let tr = new TransactionBuilder();
+// First generate the private key using the Login class
+var login = new Login();
+login.setRoles(["posting"]);
+var loginSuccess = login.checkKeys({
+    accountName: "myacccount,
+    password: "mypassword",
+    auths: {
+        posting: [["STMpostingAuthKey, 1]]
+    }}
+);
+
+if (!loginSuccess) {
+    throw new Error("The password or account name was incorrect");
+}    
+// Then create the transaction and sign it without broadcasting
+var tr = new TransactionBuilder();
 tr.add_type_operation("vote", {
     voter: "myaccount,
     author: "seshadga",
