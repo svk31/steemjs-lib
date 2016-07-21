@@ -60,6 +60,9 @@ tr.process_transaction(login, null, false);
 
 The third argument is `process_transaction` is `broadcast`. Setting it to false will simply construct the transaction and serialize it, without broadcasting it.
 
+#### Operation types
+For a list of possible operation types with their required and optional inputs, see this file: [operations.js](https://github.com/svk31/steemjs-lib/blob/master/lib/serializer/src/operations.js).
+
 #### Login
 The Chain library includes the Login class that can be used to "log in" using an account name and a corresponding password or private key. Logging in here simply means verifying that the private key or password provided can be used to generate the private key for that account. The verification checks the public keys of the given account.
 
