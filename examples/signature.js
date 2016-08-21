@@ -2,7 +2,7 @@ const options = {
     // user: "username",
     // pass: "password",
     // url: "ws://127.0.0.1:8090"
-    url: "wss://this.piston.rocks"
+    url: "wss://node.steem.ws"
 };
 
 var {Client} = require("steem-rpc");
