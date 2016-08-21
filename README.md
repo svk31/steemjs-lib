@@ -23,6 +23,35 @@ There's a quite extensive suite of tests that can be run using `npm run test`. T
 
 Three sub-libraries are included: `ECC`, `Chain` and `Serializer`. Generally only the `ECC` and `Chain` libraries need to be used directly.
 
+### API setup
+When constructing a Steem transaction and also when verifying the password/private key of an account, some data from the blockchain is required. Because of this, `steemjs-lib` includes a dependency on [steem-rpc](https://github.com/svk31/steem-rpc), which is a websocket API library for connecting to Steem API servers. Before attempting to broadcast a transaction you will need to initialise this library. By default it will connect to a public API server provided by (xeroc and jesta)[https://steemit.com/steemws/@jesta/steem-ws-the-public-steem-api-cluster], but you can change this in the options if you prefer to use your own server.
+
+To initialise the API library, use the following code:
+
+```
+var options = {};
+var {Client} = require('steem-rpc');
+var Api = Client.get(options, true);
+Api.initPromise.then(response => {
+    console.log("Api ready:", response);
+})
+```
+
+In a browser the syntax is slightly different:
+
+```
+var options = {};
+var Client = window.steemJS.steemRPC.Client;
+var Api = Client.get(options, true);
+Api.initPromise.then(response => {
+    console.log("Api ready:", response);
+})
+```
+
+More details on the possible options can be found in the README of `steem-rpc`.
+
+Once the init promise has been resolved, the API connection is ready and you can start using the transaction builder.
+
 ### Chain
 The Chain library contains utility functions related to the chain state, as well as a transaction builder and a login class.
 
@@ -33,13 +62,14 @@ For an example of how to create transaction, see below:
 
 ```
 // First generate the private key using the Login class
+var { TransactionBuilder, Login } = require("steemjs-lib");
 var login = new Login();
 login.setRoles(["posting"]);
 var loginSuccess = login.checkKeys({
-    accountName: "myacccount,
+    accountName: "myacccount",
     password: "mypassword",
     auths: {
-        posting: [["STMpostingAuthKey, 1]]
+        posting: [["STMpostingAuthKey", 1]]
     }}
 );
 
@@ -58,7 +88,7 @@ tr.add_type_operation("vote", {
 tr.process_transaction(login, null, false);
 ```
 
-The third argument is `process_transaction` is `broadcast`. Setting it to false will simply construct the transaction and serialize it, without broadcasting it.
+The third argument of `process_transaction` is `broadcast`. Setting it to false will simply construct the transaction and serialize it, without broadcasting it. If you want it to broadcast immediately, set it to `true`.
 
 #### Operation types
 For a list of possible operation types with their required and optional inputs, see this file: [operations.js](https://github.com/svk31/steemjs-lib/blob/master/lib/serializer/src/operations.js).
