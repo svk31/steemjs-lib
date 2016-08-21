@@ -24,7 +24,7 @@ There's a quite extensive suite of tests that can be run using `npm run test`. T
 Three sub-libraries are included: `ECC`, `Chain` and `Serializer`. Generally only the `ECC` and `Chain` libraries need to be used directly.
 
 ### API setup
-When constructing a Steem transaction and also when verifying the password/private key of an account, some data from the blockchain is required. Because of this, `steemjs-lib` includes a dependency on [steem-rpc](https://github.com/svk31/steem-rpc), which is a websocket API library for connecting to Steem API servers. Before attempting to broadcast a transaction you will need to initialise this library. By default it will connect to a public API server provided by (xeroc and jesta)[https://steemit.com/steemws/@jesta/steem-ws-the-public-steem-api-cluster], but you can change this in the options if you prefer to use your own server.
+When constructing a Steem transaction and also when verifying the password/private key of an account, some data from the blockchain is required. Because of this, `steemjs-lib` includes a dependency on [steem-rpc](https://github.com/svk31/steem-rpc), which is a websocket API library for connecting to Steem API servers. Before attempting to broadcast a transaction you will need to initialise this library. By default it will connect to a public API server provided by [xeroc and jesta](https://steemit.com/steemws/@jesta/steem-ws-the-public-steem-api-cluster), but you can change this in the options if you prefer to use your own server.
 
 To initialise the API library, use the following code:
 
