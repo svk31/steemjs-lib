@@ -3,7 +3,8 @@
   "version": "0.2.14",
   "description": "Pure JavaScript Steem library for node.js and browsers.",
   "browser": {
-    "ws": false
+    "ws": false,
+    "crypto": false
   },
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --recursive",
@@ -19,7 +20,7 @@
     "example-sig": "nodemon ./examples/signature.js",
     "prebrowserify": "rm -rf ./build/* && npm run build",
     "postbrowserify": "uglifyjs --compress --mangle --sequences --drop_console --output build/steemjs-lib.min.js -- build/steemjs-lib.js",
-    "browserify": "browserify dist/browser.js --standalone steemJS -o build/steemjs-lib.js -d"
+    "browserify": "browserify --full-paths dist/browser.js --standalone steemJS -o build/steemjs-lib.js -d"
   },
   "repository": {
     "type": "git",
