@@ -20,7 +20,7 @@
     "example-sig": "nodemon ./examples/signature.js",
     "prebrowserify": "rm -rf ./build/* && npm run build",
     "postbrowserify": "uglifyjs --compress --mangle --sequences --drop_console --output build/steemjs-lib.min.js -- build/steemjs-lib.js",
-    "browserify": "browserify --full-paths dist/browser.js --standalone steemJS -o build/steemjs-lib.js -d"
+    "browserify": "browserify dist/browser.js --standalone steemJS -o build/steemjs-lib.js -d"
   },
   "repository": {
     "type": "git",
