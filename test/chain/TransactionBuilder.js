@@ -67,6 +67,24 @@ describe("TransactionBuilder", function() {
         }).catch(done)
     });
 
+    it("Process transaction propagate error", function(done) {
+        let tr = new TransactionBuilder();
+
+        // The voter account should be an account for which you do not have the keys
+        tr.add_type_operation("vote", {
+            voter: "svk",
+            author: "seshadga",
+            permlink: "bitcoin-price-sustainability-looks-on-track",
+            weight: 10000
+        });
+
+        login.signTransaction(tr);
+        return tr.process_transaction(login, null, true)
+        .catch((err) => {
+            done();
+        })
+    });
+
     it("Add signer with key login", function() {
         let loginKey = new Login();
         loginKey.checkKeys({
