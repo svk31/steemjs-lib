@@ -143,21 +143,32 @@ describe("TransactionBuilder", function() {
         tr.process_transaction(login, null, false);
     });
 
-    it("Update account posting key", function() {
-        login.setRoles(["active"]);
-        login.checkKeys({
+    it("Update account posting key", function(done) {
+        let updateLogin = new Login();
+        updateLogin.setRoles(["active"]);
+        let success = updateLogin.checkKeys({
             accountName: passAccount,
             password: password,
             auths: {
-                owner: account.owner.key_auths,
-                active: account.active.key_auths,
-                posting: account.posting.key_auths
+                active: account.active.key_auths
             }}
         );
         let tr = new TransactionBuilder();
 
         let postingAuth = account.posting;
-        postingAuth.account_auths.push(["streemian", 1]);
+        let index, hasStreemian;
+
+        postingAuth.account_auths.forEach((auth, i) => {
+            if (auth[0] === "streemian") {
+                index = i;
+                hasStreemian = true;
+            }
+        });
+        if (!hasStreemian) {
+            postingAuth.account_auths.push(["streemian", 1]);
+        } else {
+            postingAuth.account_auths.splice(index, 1);
+        }
         tr.add_type_operation("account_update", {
             account: passAccount,
             posting: postingAuth,
@@ -165,7 +176,9 @@ describe("TransactionBuilder", function() {
             json_metadata: account.json_metadata
         });
 
-        tr.process_transaction(login, null, false);
+        tr.process_transaction(updateLogin, null, true).then(function(res) {
+            done()
+        })
     });
 
     // it("Broadcast transaction with key login", function(done) {
