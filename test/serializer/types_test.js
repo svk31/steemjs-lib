@@ -67,9 +67,9 @@ describe("types", function() {
         ])
         let mapObject = mapType.toObject(map)
         assert.deepEqual(mapObject, [ // sorted (witness_node sorts assending by "address" (not pubkey))
-            ["TEST7AGnzGCAGVfFnyvPziN67mfuHx9rx89r2zVoRGW1Aawim1f3Qt",0],
             ["TEST5YdgWfAejDdSuq55xfguqFTtbRKLi2Jcz1YtTsCzYgdUYXs92c",0],
             ["TEST6FHYdi17RhcUXJZr5fxZm1wvVCpXPekiHeAEwRHSEBmiR3yceK",0],
+            ["TEST7AGnzGCAGVfFnyvPziN67mfuHx9rx89r2zVoRGW1Aawim1f3Qt",0]
         ])
     })
 
