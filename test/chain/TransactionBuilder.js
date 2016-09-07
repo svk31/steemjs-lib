@@ -15,7 +15,8 @@ var {accountName : keyAccount, keys, auths : keyAuths} = require("./config.js").
 
 let account;
 
-var login = new Login();
+var postingLogin = new Login();
+var activeLogin = new Login();
 
 describe("TransactionBuilder", function() {
 
@@ -23,14 +24,22 @@ describe("TransactionBuilder", function() {
         return Api.initPromise.then(function(res) {
             return Api.database_api().exec("get_accounts", [[ passAccount]]).then(function(res) {
                 account = res[0];
-                login.setRoles(["posting"]);
-                login.checkKeys({
+                postingLogin.setRoles(["posting"]);
+                postingLogin.checkKeys({
                     accountName: passAccount,
                     password: password,
                     auths: {
-                        owner: account.owner.key_auths,
-                        active: account.active.key_auths,
                         posting: account.posting.key_auths
+                    }}
+                );
+
+                activeLogin.setRoles(["active"]);
+                console.log("active roles:", activeLogin.getRoles());
+                activeLogin.checkKeys({
+                    accountName: passAccount,
+                    password: password,
+                    auths: {
+                        active: account.active.key_auths
                     }}
                 );
             });
@@ -49,9 +58,25 @@ describe("TransactionBuilder", function() {
             permlink: "bitcoin-price-sustainability-looks-on-track",
             weight: 10000
         });
+
+        tr.process_transaction(postingLogin, null, false);
     });
 
-    it("Add signer and sign with password login", function(done) {
+    it("Add transfer operation", function(done) {
+        let tr = new TransactionBuilder();
+        tr.add_type_operation("transfer", {
+            from: passAccount,
+            to: "svk",
+            amount: "0.001 SBD",
+            memo: new Buffer("Test transfer operation", "utf8")
+        });
+
+        tr.process_transaction(activeLogin, null, true).then(res => {
+            done();
+        })
+    });
+
+    it("Add signer and sign with password postingLogin", function(done) {
         let tr = new TransactionBuilder();
         tr.add_type_operation("vote", {
             voter: passAccount,
@@ -60,7 +85,7 @@ describe("TransactionBuilder", function() {
             weight: 10000
         });
 
-        login.signTransaction(tr);
+        postingLogin.signTransaction(tr);
         return tr.finalize().then(() => {
             tr.sign();
             done();
@@ -70,7 +95,7 @@ describe("TransactionBuilder", function() {
     it("Process transaction propagate error", function(done) {
         let tr = new TransactionBuilder();
 
-        // The voter account should be an account for which you do not have the keys
+        // The voter account should be an account for which you do not have the keys, this will cause the broadcast to fail
         tr.add_type_operation("vote", {
             voter: "svk",
             author: "seshadga",
@@ -78,14 +103,14 @@ describe("TransactionBuilder", function() {
             weight: 10000
         });
 
-        login.signTransaction(tr);
-        return tr.process_transaction(login, null, true)
+        postingLogin.signTransaction(tr);
+        return tr.process_transaction(postingLogin, null, true)
         .catch((err) => {
             done();
         })
     });
 
-    it("Add signer with key login", function() {
+    it("Add signer with key postingLogin", function() {
         let loginKey = new Login();
         loginKey.checkKeys({
             accountName: keyAccount,
@@ -105,7 +130,7 @@ describe("TransactionBuilder", function() {
         loginKey.signTransaction(tr);
     });
 
-    it("Sign with key login", function(done) {
+    it("Sign with key postingLogin", function(done) {
         let loginKey = new Login();
         loginKey.checkKeys({
             accountName: keyAccount,
@@ -140,7 +165,7 @@ describe("TransactionBuilder", function() {
             weight: 10000
         });
 
-        tr.process_transaction(login, null, false);
+        tr.process_transaction(postingLogin, null, false);
     });
 
     it("Update account posting key", function(done) {
@@ -181,7 +206,7 @@ describe("TransactionBuilder", function() {
         })
     });
 
-    // it("Broadcast transaction with key login", function(done) {
+    // it("Broadcast transaction with key postingLogin", function(done) {
     //     this.timeout = 6000;
     //     let loginKey = new Login();
     //     loginKey.checkKeys({
@@ -219,7 +244,7 @@ describe("TransactionBuilder", function() {
     //         weight: 100
     //     });
     //
-    // return tr.process_transaction(login, null, true)
+    // return tr.process_transaction(postingLogin, null, true)
     // .then(res => {
     //     console.log("res:", res);
     //     done();

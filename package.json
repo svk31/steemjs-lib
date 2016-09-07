@@ -1,6 +1,6 @@
 {
   "name": "steemjs-lib",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Pure JavaScript Steem library for node.js and browsers.",
   "browser": {
     "ws": false,
