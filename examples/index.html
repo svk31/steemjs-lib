@@ -37,7 +37,32 @@
                     tr.appendChild(definitionTd);
                     globalTable.appendChild(tr);
                 }
+            });
+
+            let tr = new window.steemJS.TransactionBuilder();
+            tr.add_type_operation("transfer", {
+                from: "myAccount",
+                to: "toAccount",
+                amount: "0.001 SBD",
+                memo: "Test transfer operation"
+            });
+            var activeLogin = new window.steemJS.Login();
+            activeLogin.setRoles(["active"]);
+            activeLogin.checkKeys({
+                accountName: "myAccount",
+                password: "myPasswordIsVeryLong",
+                auths: {
+                    active: [["myActiveAuth", 1]]
+                }}
+            );
+
+            console.log("attempt transaction:", tr);
+
+            tr.process_transaction(activeLogin, null, true).then(res => {
+                console.log("transfer done");
             })
+
+
         });
 
     </script>
