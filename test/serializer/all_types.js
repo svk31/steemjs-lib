@@ -13,18 +13,19 @@ var {
     static_variant, map, set,
     public_key, address,
     time_point_sec,
-    optional
+    optional, asset
 } = types
 
-var { asset } = ops
+var { transfer } = ops
 
 // Must stay in sync with allTypes below.
 let AllTypes = new Serializer("all_types", {
     uint8, uint16, uint32, int64, uint64,
     string, bytes: bytes(1), bool, array: array(uint8), fixed_array: fixed_array(2, uint8),
     object_id_type, //vote_id,
+    asset,
 
-    static_variant: array(static_variant( [asset] )),
+    static_variant: array(static_variant( [transfer] )),
     map: map(uint8, uint8),
     set: set(uint8),
 
@@ -43,8 +44,8 @@ let allTypes = {
 
     string: "test", bytes: "ff", bool: true, array: [2, 1], fixed_array: [1, 0],
     object_id_type: "1.1.1", //vote_id: "2:1",
-
-    static_variant: [[0, { amount: "1", symbol: "STEEM" }] ],
+    asset: "0.000 STEEM",
+    static_variant: [[0, {from: "", to: "", amount: "0.000 STEEM", memo: "" }]],
     map: [[4,3], [2,1]],
     set: [2,1],
 
