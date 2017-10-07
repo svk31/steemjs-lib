@@ -79,7 +79,7 @@ if (!loginSuccess) {
 // Then create the transaction and sign it without broadcasting
 var tr = new TransactionBuilder();
 tr.add_type_operation("vote", {
-    voter: "myaccount,
+    voter: "myaccount",
     author: "seshadga",
     permlink: "bitcoin-price-sustainability-looks-on-track",
     weight: 100
